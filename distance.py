@@ -11,19 +11,14 @@ def levDistance(str1, str2):
 			optimal = d
 
 	# get format of buffer for strings based on mappings
-	buf = getBufferedArrayFormat(str1, str2, optimal)
+	buf = getBufferedArrayFormats(str1, str2, optimal)
 
-	# get actual formatted arrays for each string
-	# format1 = getFormattedFromBuffer(str1, buf)
-	# format2 = getFormattedFromBuffer(str2, buf)
+	differences = 0
+	for i in range(0, len(buf[0])):
+		if buf[0][i] != buf[1][i]:
+			differences += 1
 
-	# differences = 0
-	# for i in range(0, len(format1)):
-	# 	if format1[i] != format2[i]:
-	# 		differences += 1
-
-	return None
-	# return differences
+	return differences
 
 # return dictionary associating indices of chars in str1 with their corresponding chars in str2
 def getListOfIndexMappings(str1, str2, start1, start2):
@@ -59,7 +54,7 @@ def getListOfIndexMappings(str1, str2, start1, start2):
 	return setOfDicts
 
 # return buffered array which works for both str1 and str2
-def getBufferedArrayFormat(str1, str2, indexMapping):
+def getBufferedArrayFormats(str1, str2, indexMapping):
 
 	sharedIndices = sorted([ (key, indexMapping[key]) for key in indexMapping ])
 
@@ -82,7 +77,7 @@ def getBufferedArrayFormat(str1, str2, indexMapping):
 
 
 		curShared = sharedIndices[i]
-		prevShared = sharedIndices[i - 1] if i > 0 else (0, 0) if curShared != (0, 0) else (-1, -1)
+		prevShared = sharedIndices[i - 1] if i > 0 else (0, 0)#  if curShared != (0, 0) else (-1, -1)
 
 
 		if curShared[0] - prevShared[0] > curShared[1] - prevShared[1]:
@@ -155,18 +150,23 @@ def getBufferedArrayFormat(str1, str2, indexMapping):
 	for j in range(0, bufferspace):
 			bufferedTemplate.append(None)
 
+			if j < len(charsBeforeEnd1):
+				template1.append(charsBeforeEnd1[j])
+			else:
+				template1.append(None)
+
+			if j < len(charsBeforeEnd2):
+				template2.append(charsBeforeEnd2[j])
+			else:
+				template2.append(None)
+
 	print "Buffered Template: "
 	print bufferedTemplate
 
 	print "temp1: ", template1
 	print "temp2: ", template2
 
-	return bufferedTemplate
-
-# NEED TO WRITE:
-# return the filled out buffer for a given string
-def getFormattedFromBuffer(str, buffer):
-	pass
+	return ( template1, template2 )
 
 def main():
 	w1 = "cat"
