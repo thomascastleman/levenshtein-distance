@@ -14,15 +14,16 @@ def levDistance(str1, str2):
 	buf = getBufferedArrayFormat(str1, str2, optimal)
 
 	# get actual formatted arrays for each string
-	format1 = getFormattedFromBuffer(str1, buf)
-	format2 = getFormattedFromBuffer(str2, buf)
+	# format1 = getFormattedFromBuffer(str1, buf)
+	# format2 = getFormattedFromBuffer(str2, buf)
 
-	differences = 0
-	for i in range(0, len(format1)):
-		if format1[i] != format2[i]:
-			differences += 1
+	# differences = 0
+	# for i in range(0, len(format1)):
+	# 	if format1[i] != format2[i]:
+	# 		differences += 1
 
-	return differences
+	return None
+	# return differences
 
 # return dictionary associating indices of chars in str1 with their corresponding chars in str2
 def getListOfIndexMappings(str1, str2, start1, start2):
@@ -70,31 +71,66 @@ def getBufferedArrayFormat(str1, str2, indexMapping):
 	print bufferedTemplate
 	print sharedIndices
 
+	template1 = bufferedTemplate[:]
+	template2 = bufferedTemplate[:]
+
+	firstIter = True
+
+	indexInTemplate = 0
+	print "shared incides: ", sharedIndices
 	for i in range(0, len(sharedIndices)):
+
 
 		curShared = sharedIndices[i]
 		prevShared = sharedIndices[i - 1] if i > 0 else (0, 0) if curShared != (0, 0) else (-1, -1)
 
+
 		if curShared[0] - prevShared[0] > curShared[1] - prevShared[1]:
-			bufferspace = curShared[0] - prevShared[0] - 1
+			bufferspace = curShared[0] - prevShared[0]
 		else:
-			bufferspace = curShared[1] - prevShared[1] - 1
+			bufferspace = curShared[1] - prevShared[1]
+
+		if i != 0:
+			bufferspace -= 1
+
+		print "\n\nlooking at shared char '", str1[curShared[0]], "'"
+
+		print "prevshared: ", prevShared
+		print "curShared: ", curShared
+
+		charsInBetween1 = str1[prevShared[0] + 1 if not firstIter else 0 : curShared[0]]
+		charsInBetween2 = str2[prevShared[1] + 1 if not firstIter else 0 : curShared[1]]
+
+		#DEBUG
+		print "In between:"
+		print "1: ", charsInBetween1
+		print "2: ", charsInBetween2
 
 		print "bufferspace: ", bufferspace
 
+
 		for j in range(0, bufferspace):
-			bufferedTemplate.insert(i, None)
 
-		i = i + bufferspace
+			if j < len(charsInBetween1):
+				template1.insert(indexInTemplate, charsInBetween1[len(charsInBetween1)- 1 - j])
+			else:
+				template1.insert(indexInTemplate, None)
 
-	# now add front buffer if needed
-	if sharedIndices[0][0] > sharedIndices[0][1]:
-		bufferspace = sharedIndices[0][0]
-	else:
-		bufferspace = sharedIndices[0][1]
+			if j < len(charsInBetween2):
+				template2.insert(indexInTemplate, charsInBetween2[len(charsInBetween2) - 1 - j])
+			else:
 
-	for j in range(0, bufferspace):
-			bufferedTemplate.insert(0, None)
+				template2.insert(indexInTemplate, None)
+
+			bufferedTemplate.insert(indexInTemplate, None)
+			print "Inserting none at ", indexInTemplate
+
+		print bufferedTemplate
+
+
+		indexInTemplate += bufferspace + 1
+		print "index updating to ", indexInTemplate
+		firstIter = False
 
 	# now add end buffer if needed
 	end = (len(str1), len(str2))
@@ -105,11 +141,25 @@ def getBufferedArrayFormat(str1, str2, indexMapping):
 	else:
 		bufferspace = end[1] - secondToEnd[1] - 1
 
+
+	print "end: ", end
+	print "second to end ", secondToEnd
+
+	charsBeforeEnd1 = str1[secondToEnd[0] + 1:end[0]]
+	charsBeforeEnd2 = str2[secondToEnd[1] + 1:end[1]]	
+
+	# DEBUG
+	print "before end1: ", charsBeforeEnd1
+	print "before end2: ", charsBeforeEnd2
+
 	for j in range(0, bufferspace):
 			bufferedTemplate.append(None)
 
 	print "Buffered Template: "
 	print bufferedTemplate
+
+	print "temp1: ", template1
+	print "temp2: ", template2
 
 	return bufferedTemplate
 
@@ -119,11 +169,13 @@ def getFormattedFromBuffer(str, buffer):
 	pass
 
 def main():
-	w1 = "cranberry"
-	w2 = "randomly"
+	w1 = "cat"
+	w2 = "catch"
 
 	lev = levDistance(w1, w2)
 	print lev
+
+
 
 
 if __name__ == "__main__":
