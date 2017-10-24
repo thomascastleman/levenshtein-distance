@@ -13,29 +13,36 @@ def levDistance(str1, str2):
 
 	print "\nMapping found: ", optimal
 
-	# get format of buffer for strings based on mappings
-	buf = getBufferedArrayFormats(str1, str2, optimal)
+
+	if len(optimal) > 0:
+
+		# get format of buffer for strings based on mappings
+		buf = getBufferedArrayFormats(str1, str2, optimal)
 
 
-	print "\nBUFFERS:"
-	for c in buf[0]:
-		print c if c != None else "*",
-	print ""
-	for c in buf[1]:
-		print c if c != None else "*",
+		print "\nBUFFERS:"
+		for c in buf[0]:
+			print c if c != None else "*",
+		print ""
+		for c in buf[1]:
+			print c if c != None else "*",
 
-	print ""
-	disagree = 0
-	for i in range(0, len(buf[0])):
-		if buf[0][i] != buf[1][i]:
-			disagree += 1
-			print "-",
-		else:
-			print "+",
+		print ""
+		disagree = 0
+		for i in range(0, len(buf[0])):
+			if buf[0][i] != buf[1][i]:
+				disagree += 1
+				print "-",
+			else:
+				print "+",
 
-	print "\n\nFinished with ", disagree, " disagreements"
+		print "\n\nFinished with ", disagree, " disagreements"
 
-	return disagree
+		return disagree
+
+	else:
+
+		return len(str1) if len(str1) > len(str2) else len(str2)
 
 # return dictionary associating indices of chars in str1 with their corresponding chars in str2
 def getListOfIndexMappings(str1, str2, start1, start2):
@@ -182,8 +189,6 @@ def main():
 
 	lev = levDistance(w1, w2)
 	print "\nDistance: ", lev
-
-
 
 
 if __name__ == "__main__":
