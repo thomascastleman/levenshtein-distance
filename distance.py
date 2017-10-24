@@ -113,6 +113,7 @@ def getBufferedArrayFormat(str1, str2, indexMapping):
 
 	return bufferedTemplate
 
+# NEED TO WRITE:
 # return the filled out buffer for a given string
 def getFormattedFromBuffer(str, buffer):
 	pass
