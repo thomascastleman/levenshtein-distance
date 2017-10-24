@@ -1,7 +1,28 @@
 
 # calculate Levenshtein distance between two strings str1 and str2
 def levDistance(str1, str2):
-	pass
+	# get mappings
+	mappings = getListOfIndexMappings(str1, str2, 0, 0)
+
+	# get optimal set of mappings of shared chars
+	optimal = {}
+	for d in mappings:
+		if len(d) > len(optimal):
+			optimal = d
+
+	# get format of buffer for strings based on mappings
+	buf = getBufferedArrayFormat(str1, str2, optimal)
+
+	# get actual formatted arrays for each string
+	format1 = getFormattedFromBuffer(str1, buf)
+	format2 = getFormattedFromBuffer(str2, buf)
+
+	differences = 0
+	for i in range(0, len(format1)):
+		if format1[i] != format2[i]:
+			differences += 1
+
+	return differences
 
 # return dictionary associating indices of chars in str1 with their corresponding chars in str2
 def getListOfIndexMappings(str1, str2, start1, start2):
@@ -36,8 +57,8 @@ def getListOfIndexMappings(str1, str2, start1, start2):
 	print "exiting subproblem"
 	return setOfDicts
 
-# return the char[] form of str1 and str2 which have been buffered as necessary with null positions to allow direct comparison
-def getBufferedArrayFormats(str1, str2, indexMapping):
+# return buffered array which works for both str1 and str2
+def getBufferedArrayFormat(str1, str2, indexMapping):
 
 	sharedIndices = sorted([ (key, indexMapping[key]) for key in indexMapping ])
 
@@ -87,34 +108,22 @@ def getBufferedArrayFormats(str1, str2, indexMapping):
 	for j in range(0, bufferspace):
 			bufferedTemplate.append(None)
 
-
 	print "Buffered Template: "
 	print bufferedTemplate
 
-	
+	return bufferedTemplate
 
-
-	return None
+# return the filled out buffer for a given string
+def getFormattedFromBuffer(str, buffer):
+	pass
 
 def main():
 	w1 = "cranberry"
 	w2 = "randomly"
 
-	s = getListOfIndexMappings(w1, w2, 0, 0)
-	print "set: ", s
+	lev = levDistance(w1, w2)
+	print lev
 
-	opt = {}
-	for d in s:
-		if len(d) > len(opt):
-			opt = d
-
-	print "\n\n"
-
-	both = getBufferedArrayFormats(w1, w2, opt)
-
-
-	# z = getOptimalZeroPosition(w2Com, w1Com)
-	# print "Optimal zero index of ", w1Com, " on ", w2Com, " --> ", z
 
 if __name__ == "__main__":
 	main()
