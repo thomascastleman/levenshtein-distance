@@ -1,6 +1,7 @@
 
 # calculate Levenshtein distance between two strings str1 and str2
 def levDistance(str1, str2):
+	print "Getting optimal mapping of indices..."
 	# get mappings
 	mappings = getListOfIndexMappings(str1, str2, 0, 0)
 
@@ -10,15 +11,23 @@ def levDistance(str1, str2):
 		if len(d) > len(optimal):
 			optimal = d
 
+	print "Mapping found: ", optimal
+
 	# get format of buffer for strings based on mappings
 	buf = getBufferedArrayFormats(str1, str2, optimal)
 
-	differences = 0
+	print "\nCounting disagreements..."
+	disagree = 0
 	for i in range(0, len(buf[0])):
 		if buf[0][i] != buf[1][i]:
-			differences += 1
+			disagree += 1
+			print "-",
+		else:
+			print "+",
 
-	return differences
+	print "\nFinished with ", disagree, " disagreements"
+
+	return disagree
 
 # return dictionary associating indices of chars in str1 with their corresponding chars in str2
 def getListOfIndexMappings(str1, str2, start1, start2):
@@ -63,12 +72,15 @@ def getBufferedArrayFormats(str1, str2, indexMapping):
 	for i in sharedIndices:
 		bufferedTemplate.append(str1[i[0]])
 
+	print "Shared characters: ", bufferedTemplate
+
 	# copy that array into separate templates for each string
 	template1 = bufferedTemplate[:]
 	template2 = bufferedTemplate[:]
 
 	indexInTemplate = 0		# index used to acces chars in each template
 
+	print "Building buffered string templates..."
 	# for each shared character
 	for i in range(0, len(sharedIndices)):
 
@@ -107,6 +119,9 @@ def getBufferedArrayFormats(str1, str2, indexMapping):
 			# for generic buffer template
 			bufferedTemplate.insert(indexInTemplate, None)
 
+			print "\nstr1 template ", template1
+			print "str2 template ", template2
+
 		indexInTemplate += bufferspace + 1	# update index back up to the next shared char now that buffer space has been added
 
 	# now add buffer space / chars to end if needed
@@ -140,6 +155,9 @@ def getBufferedArrayFormats(str1, str2, indexMapping):
 
 			bufferedTemplate.append(None) # for generic buffer template
 
+			print "\nstr1 template ", template1
+			print "str2 template ", template2
+
 	print "\n\nGeneric buffer: ",
 	print bufferedTemplate
 
@@ -149,8 +167,8 @@ def getBufferedArrayFormats(str1, str2, indexMapping):
 	return ( template1, template2 )
 
 def main():
-	w1 = "lane"
-	w2 = "ale"
+	w1 = "cranberry"
+	w2 = "randomly"
 
 	lev = levDistance(w1, w2)
 	print "\nDistance: ", lev
