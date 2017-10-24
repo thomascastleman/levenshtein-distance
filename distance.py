@@ -41,7 +41,7 @@ def levDistance(str1, str2):
 # 	return optZeroIndex
 
 # return dictionary associating indices of chars in str1 with their corresponding chars in str2
-def getSetOfAllListsOfNonConflictingSharedCharacters(str1, str2, start1, start2):
+def getListOfIndexMappings(str1, str2, start1, start2):
 
 	setOfDicts = []
 
@@ -56,7 +56,7 @@ def getSetOfAllListsOfNonConflictingSharedCharacters(str1, str2, start1, start2)
 				if ind1 != len(str1) - 1 and ind2 != len(str2) - 1:
 
 					print "Entering subproblem with start1 on ", str1, " = ", ind1 + 1, " and start2 on ", str2, " = ", ind2 + 1
-					subProblemSet = getSetOfAllListsOfNonConflictingSharedCharacters(str1, str2, ind1 + 1, ind2 + 1)
+					subProblemSet = getListOfIndexMappings(str1, str2, ind1 + 1, ind2 + 1)
 
 					if len(subProblemSet) != 0:
 						for dict_ in subProblemSet:
@@ -81,7 +81,7 @@ def main():
 	w1 = "paine"
 	w2 = "cane"
 
-	s = getSetOfAllListsOfNonConflictingSharedCharacters(w1, w2, 0, 0)
+	s = getListOfIndexMappings(w1, w2, 0, 0)
 	print "set: ", s
 
 	# z = getOptimalZeroPosition(w2Com, w1Com)
