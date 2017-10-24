@@ -1,7 +1,7 @@
 
 # calculate Levenshtein distance between two strings str1 and str2
 def levDistance(str1, str2):
-	print "Getting optimal mapping of indices..."
+	print "Getting optimal mapping of indices between '" + str1 + "' and '" + str2 + "' ...\n"
 	# get mappings
 	mappings = getListOfIndexMappings(str1, str2, 0, 0)
 
@@ -11,12 +11,20 @@ def levDistance(str1, str2):
 		if len(d) > len(optimal):
 			optimal = d
 
-	print "Mapping found: ", optimal
+	print "\nMapping found: ", optimal
 
 	# get format of buffer for strings based on mappings
 	buf = getBufferedArrayFormats(str1, str2, optimal)
 
-	print "\nCounting disagreements..."
+
+	print "\nBUFFERS:"
+	for c in buf[0]:
+		print c if c != None else "*",
+	print ""
+	for c in buf[1]:
+		print c if c != None else "*",
+
+	print ""
 	disagree = 0
 	for i in range(0, len(buf[0])):
 		if buf[0][i] != buf[1][i]:
@@ -25,7 +33,7 @@ def levDistance(str1, str2):
 		else:
 			print "+",
 
-	print "\nFinished with ", disagree, " disagreements"
+	print "\n\nFinished with ", disagree, " disagreements"
 
 	return disagree
 
@@ -39,9 +47,12 @@ def getListOfIndexMappings(str1, str2, start1, start2):
 
 			if str1[ind1] == str2[ind2]:
 
+				print "Char match found: '" + str1[ind1] + "' at ", ind1, " and ", ind2
+
 				if ind1 != len(str1) - 1 and ind2 != len(str2) - 1:
 
-					print "Entering subproblem with start1 on ", str1, " = ", ind1 + 1, " and start2 on ", str2, " = ", ind2 + 1
+					print "Entering subproblem on '" + str1[ind1 + 1:] + "' and '" + str2[ind2 + 1:] + "'"
+
 					subProblemSet = getListOfIndexMappings(str1, str2, ind1 + 1, ind2 + 1)
 
 					if len(subProblemSet) != 0:
@@ -59,7 +70,7 @@ def getListOfIndexMappings(str1, str2, start1, start2):
 					setOfDicts.append(d)
 
 	
-	print "exiting subproblem"
+	print "Exiting subproblem"
 	return setOfDicts
 
 # return buffered array which works for both str1 and str2
@@ -158,17 +169,16 @@ def getBufferedArrayFormats(str1, str2, indexMapping):
 			print "\nstr1 template ", template1
 			print "str2 template ", template2
 
-	print "\n\nGeneric buffer: ",
-	print bufferedTemplate
+	print "\n\nGENERIC BUFFER: "
 
-	print "Str1 buffer: ", template1
-	print "Str2 buffer: ", template2
+	for i in bufferedTemplate:
+		print i if i != None else "*",
 
 	return ( template1, template2 )
 
 def main():
-	w1 = "cranberry"
-	w2 = "randomly"
+	w1 = "dab"
+	w2 = "onem"
 
 	lev = levDistance(w1, w2)
 	print "\nDistance: ", lev
