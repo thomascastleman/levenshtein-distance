@@ -184,8 +184,8 @@ def getBufferedArrayFormats(str1, str2, indexMapping):
 	return ( template1, template2 )
 
 def main():
-	w1 = "dab"
-	w2 = "onem"
+	w1 = "test"
+	w2 = "disagreement"
 
 	lev = levDistance(w1, w2)
 	print "\nDistance: ", lev
